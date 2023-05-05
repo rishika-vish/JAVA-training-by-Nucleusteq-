@@ -57,7 +57,7 @@ HAVING COUNT(course_id) < 5
 );
 
 --professor's name and the total number of classes she or he has taught.
-SELECT professor_name, COUNT(course_id) as total_classes_taught
+SELECT COUNT(course_id) as total_classes_taught
 FROM professor1 JOIN course1
 ON professor1.professor_id = course1.professor_id
 GROUP BY professor1.professor_id;
