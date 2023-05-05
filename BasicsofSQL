@@ -1,0 +1,87 @@
+create table course1 (
+    course_id int primary key, 
+    course_name varchar(25), 
+    professor_id int
+);
+create table student1 (
+    student_id int primary key, 
+    student_name varchar(25), 
+    course_id int
+);
+create table professor1 (
+    professor_id int primary key, 
+    professor_name varchar(25), 
+    );
+insert INTO course1 VALUES(101, 'English', 50);
+insert INTO course1 VALUES(102, 'Maths', 51);
+insert INTO course1 VALUES(103, 'Physics', 52);
+insert INTO course1 VALUES(104, 'Chemistry', 53);
+insert INTO course1 VALUES(105, 'Biology', 54);
+insert INTO course1 VALUES(106, 'History', 55);
+insert INTO course1 VALUES(107, 'Politics', 56);
+insert INTO course1 VALUES(108, 'Hindi', 57);
+insert INTO course1 VALUES(109, 'Computer Science', 58);
+insert INTO course1 VALUES(110, 'Physical Education', 59);
+
+insert INTO student1 VALUES(1, 'Riya', 101);
+insert INTO student1 VALUES(2, 'Piya', 110);
+insert INTO student1 VALUES(3, 'Siya', 102);
+insert INTO student1 VALUES(4, 'Jiya', 106);
+insert INTO student1 VALUES(5, 'Miya', 102);
+insert INTO student1 VALUES(6, 'Amit', 103);
+insert INTO student1 VALUES(7, 'Raj', 103);
+insert INTO student1 VALUES(8, 'Rohit', 107);
+insert INTO student1 VALUES(9, 'Komal', 102);
+insert INTO student1 VALUES(10, 'Ankit', 104);
+
+insert INTO professor1 VALUES(50, 'Anita');
+insert INTO professor1 VALUES(51, 'Aditi');
+insert INTO professor1 VALUES(52, 'Rohan');
+insert INTO professor1 VALUES(53, 'Ram');
+insert INTO professor1 VALUES(54, 'Neetu');
+insert INTO professor1 VALUES(55, 'Ekta');
+insert INTO professor1 VALUES(56, 'Maya');
+insert INTO professor1 VALUES(57, 'Anil');
+insert INTO professor1 VALUES(58, 'Amar');
+insert INTO professor1 VALUES(59, 'Arun');
+
+--names od student not enrolled
+SELECT student_name FROM student1 WHERE course_id IS NULL;
+
+--names of faculty members for whom the combined enrollment of the courses that they teach is less than 5
+SELECT professor_name FROM professor1
+WHERE professor_id IN (
+SELECT professor_id FROM course1
+GROUP BY professor_id
+HAVING COUNT(course_id) < 5
+);
+
+--professor's name and the total number of classes she or he has taught.
+SELECT professor_name, COUNT(course_id) as total_classes_taught
+FROM professor1 JOIN course1
+ON professor1.professor_id = course1.professor_id
+GROUP BY professor1.professor_id;
+
+--insert a new student row
+INSERT INTO student1 (student_id, student_name, course_id) VALUES (11, 'Navya', 108);
+
+--update the course name
+UPDATE course1 SET course_name = 'Database Systems' WHERE course_id = 109;
+
+--total number of students enrolled in each course:
+SELECT course_name, COUNT(student_id) as total_students_enrolled
+FROM course1 JOIN student1
+ON course1.course_id = student1.course_id
+GROUP BY course1.course_id;
+
+
+--total number of students enrolled in each course taught by a particular professor:
+SELECT professor_name, course_name, COUNT(student_id) as total_students_enrolled
+FROM professor1 JOIN course1
+ON Professor.professor_id = Course.professor_id
+JOIN Student ON course1.course_id = student1.course_id
+WHERE professor1.professor_name = 'Arun'
+GROUP BY course1.course_id;
+
+
+
